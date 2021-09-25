@@ -1,27 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <ncurses.h>
 
 #define HEADER_POS 0
 #define WINDOW_POS 1
 
-char** read_lines(FILE* file, int* nb_lines) {
+void read_lines(FILE* file, int* nb_lines, char*** lines, size_t** lines_len) {
     size_t cur_line = 0;
     size_t read_len;
     char* line = NULL;
-    char** lines = NULL;
+
+    *lines = NULL;
+    *lines_len = NULL;
 
     int read;
     while ((read = getline(&line, &read_len, file)) != -1) {
-        lines = realloc(lines, (cur_line + 1) * sizeof(char*));
-        lines[cur_line] = line;
+        *lines = realloc(*lines, (cur_line + 1) * sizeof(char*));
+        *lines_len = realloc(*lines_len, (cur_line + 1) * sizeof(size_t));
+
+        (*lines)[cur_line] = line;
+        (*lines_len)[cur_line] = strlen(line);
+
         cur_line++;
         line = NULL;
     }
 
     *nb_lines = cur_line;
-
-    return lines;
 }
 
 void free_lines(char** lines, int nb_lines) {
@@ -59,7 +64,9 @@ int main(int argc, char** argv) {
 
     // Read file
     int nb_lines;
-    char** lines = read_lines(f, &nb_lines);
+    char** lines;
+    size_t* lines_len;
+    read_lines(f, &nb_lines, &lines, &lines_len);
 
     // Show header
     move(HEADER_POS, 0);
@@ -69,13 +76,22 @@ int main(int argc, char** argv) {
     char* line;
     size_t len;
     unsigned int start_row = 0;
+    unsigned int start_col = 0;
     int run = 1;
     while (run) {
         // Show window
         wclear(win);
         wmove(win, WINDOW_POS, 0);
         for (int i = 0; i < height - 2 && start_row + i < nb_lines; i++) {
-            wprintw(win, "%4d: %s", start_row + i, lines[start_row + i]);
+            size_t row = start_row + i;
+            char* line_to_print = NULL;
+
+            if (start_col < lines_len[row]) {
+                line_to_print = lines[row] + start_col;
+            } else {
+                line_to_print = "\n";
+            }
+            wprintw(win, "%4d: %s", row, line_to_print);
         }
         box(win, 0, 0);
         wrefresh(win);
@@ -84,7 +100,17 @@ int main(int argc, char** argv) {
         int ch = getch();
         switch (ch) {
         case ' ':
+        case KEY_DOWN:
             if (start_row + 1 < nb_lines) start_row++;
+            break;
+        case KEY_UP:
+            if (start_row > 0) start_row--;
+            break;
+        case KEY_LEFT:
+            if (start_col > 0) start_col--;
+            break;
+        case KEY_RIGHT:
+            start_col++;
             break;
         case 27:  // ESC
             run = 0;
