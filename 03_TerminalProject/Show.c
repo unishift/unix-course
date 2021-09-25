@@ -47,6 +47,7 @@ int main(int argc, char** argv) {
     noecho();
     curs_set(0);
     cbreak();
+    keypad(stdscr, true);
     // Window
     WINDOW* win = newwin(LINES - WINDOW_POS, COLS, WINDOW_POS, 0);
     keypad(win, TRUE);
