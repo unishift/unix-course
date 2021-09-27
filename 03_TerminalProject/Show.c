@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 #include <ncurses.h>
 
 #define HEADER_POS 0
@@ -52,11 +53,11 @@ int main(int argc, char** argv) {
     noecho();
     curs_set(0);
     cbreak();
-    keypad(stdscr, true);
+    keypad(stdscr, TRUE);
     // Window
     WINDOW* win = newwin(LINES - WINDOW_POS, COLS, WINDOW_POS, 0);
     keypad(win, TRUE);
-    scrollok (win, TRUE);
+    scrollok (win, FALSE);
 
     // Get info
     int height, width;
@@ -91,7 +92,8 @@ int main(int argc, char** argv) {
             } else {
                 line_to_print = "\n";
             }
-            wprintw(win, "%4d: %s", row, line_to_print);
+            mvwprintw(win, WINDOW_POS + i, 0, "%4d: ", row);
+            waddstr(win, line_to_print);
         }
         box(win, 0, 0);
         wrefresh(win);
