@@ -5,6 +5,14 @@
 
 #define BUF_SIZE 4096
 
+enum {
+	EINVARG = 1,
+	EINFILE,
+	EOUTFILE,
+	EREAD,
+	EWRITE
+};
+
 int main(int argc, char** argv) {
 	if (argc != 3) {
 		fprintf(
@@ -13,7 +21,7 @@ int main(int argc, char** argv) {
 			"Usage: %s infile outfile\n",
 			argv[0]
 		);
-		return EXIT_FAILURE;
+		return EINVARG;
 	}
 
 	const char* infile_path  = argv[1];
@@ -27,7 +35,7 @@ int main(int argc, char** argv) {
 			"Error: %s\n",
 			infile_path, strerror(errno)
 		);
-		return EXIT_FAILURE;
+		return EINFILE;
 	}
 	
 	FILE* outfile = fopen(outfile_path, "wb");
@@ -39,7 +47,7 @@ int main(int argc, char** argv) {
 			outfile_path, strerror(errno)
 		);
 		fclose(infile);
-		return EXIT_FAILURE;
+		return EOUTFILE;
 	}
 
 	/* Moving */
@@ -57,7 +65,7 @@ int main(int argc, char** argv) {
 
 			remove(outfile_path);
 
-			return EXIT_FAILURE;
+			return EREAD;
 		}
 
 		const size_t n_write = fwrite(buf, n_read, sizeof(char), outfile);
@@ -72,7 +80,7 @@ int main(int argc, char** argv) {
 
 			remove(outfile_path);
 
-			return EXIT_FAILURE;
+			return EWRITE;
 		}
 	}
 
