@@ -1,4 +1,4 @@
-project('buf', 'c', version: '1.0.0')
+project('buf', 'c', version: '1.0.0', default_options : 'b_coverage=true')
 
 buf = library('buf', 'buf.c')
 
