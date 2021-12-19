@@ -1,0 +1,101 @@
+.TH "binsearch.c" 3 "Mon Dec 20 2021" "binsearch" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+binsearch.c
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <ctype\&.h>\fP
+.br
+\fC#include <libintl\&.h>\fP
+.br
+\fC#include <locale\&.h>\fP
+.br
+\fC#include <getopt\&.h>\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fB_\fP(STRING)   gettext(STRING)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBprint_help\fP (int use_md)"
+.br
+.ti -1c
+.RI "void \fBprint_roman\fP (unsigned num)"
+.br
+.RI "Function to print number in roman format\&. "
+.ti -1c
+.RI "unsigned \fBfrom_roman\fP (const char *roman)"
+.br
+.RI "Function to convert number in roman format to normal\&. "
+.ti -1c
+.RI "void \fBbinsearch\fP (int use_roman)"
+.br
+.RI "Main binary search function\&. "
+.ti -1c
+.RI "int \fBmain\fP (int argc, char **argv)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define _(STRING)   gettext(STRING)"
+
+.SH "Function Documentation"
+.PP 
+.SS "void binsearch (int use_roman)"
+
+.PP
+Main binary search function\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIuse_roman\fP Whether to use roman numbers instead of normal ones 
+.RE
+.PP
+
+.SS "unsigned from_roman (const char * roman)"
+
+.PP
+Function to convert number in roman format to normal\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIroman\fP roman formatted number 
+.RE
+.PP
+\fBReturns\fP
+.RS 4
+number in normal format 
+.RE
+.PP
+
+.SS "int main (int argc, char ** argv)"
+
+.SS "void print_help (int use_md)"
+
+.SS "void print_roman (unsigned num)"
+
+.PP
+Function to print number in roman format\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fInum\fP number to print 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for binsearch from the source code\&.
